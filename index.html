@@ -69,14 +69,14 @@
                         <div class="size-8 text-primary">
                             <span class="material-symbols-outlined !text-[32px]">spa</span>
                         </div>
-                        <h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">Lumina Beauty</h2>
+                        <h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">nur hafizah</h2>
                     </div>
                     
                     <div class="hidden md:flex items-center gap-8">
-                        <a onClick={handleNav('/shop')} class={`text-sm font-medium transition-colors cursor-pointer ${activePage === 'shop' ? 'text-primary' : 'text-slate-600 dark:text-slate-200 hover:text-primary dark:hover:text-primary'}`}>Shop</a>
-                        <a onClick={handleNav('/about')} class={`text-sm font-medium transition-colors cursor-pointer ${activePage === 'about' ? 'text-primary' : 'text-slate-600 dark:text-slate-200 hover:text-primary dark:hover:text-primary'}`}>About</a>
-                        <a class="text-slate-600 dark:text-slate-200 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors cursor-pointer">Ingredients</a>
-                        <a class="text-slate-600 dark:text-slate-200 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors cursor-pointer">Journal</a>
+                        <a onClick={handleNav('/tema')} class={`text-sm font-medium transition-colors cursor-pointer ${activePage === 'tema' ? 'text-primary' : 'text-slate-600 dark:text-slate-200 hover:text-primary dark:hover:text-primary'}`}>tema</a>
+                        <a onClick={handleNav('/rumah')} class={`text-sm font-medium transition-colors cursor-pointer ${activePage === 'rumah' ? 'text-primary' : 'text-slate-600 dark:text-slate-200 hover:text-primary dark:hover:text-primary'}`}>rumah</a>
+                        <a class="text-slate-600 dark:text-slate-200 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors cursor-pointer">tokoh</a>
+                        <a class="text-slate-600 dark:text-slate-200 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors cursor-pointer">pohon</a>
                     </div>
                     
                     <div class="flex gap-2">
@@ -98,10 +98,10 @@
                     {/* Mobile Menu */}
                     {isMenuOpen && (
                         <div className="absolute top-full left-0 w-full bg-background-light dark:bg-background-dark border-b border-slate-200 dark:border-[#48232c] p-4 flex flex-col gap-4 md:hidden shadow-xl">
-                            <a onClick={handleNav('/shop')} className="text-lg font-medium">Shop</a>
-                            <a onClick={handleNav('/about')} className="text-lg font-medium">About</a>
-                            <a className="text-lg font-medium">Ingredients</a>
-                            <a className="text-lg font-medium">Journal</a>
+                            <a onClick={handleNav('/tema')} className="text-lg font-medium">tema</a>
+                            <a onClick={handleNav('/rumah')} className="text-lg font-medium">rumah</a>
+                            <a className="text-lg font-medium">tokoh</a>
+                            <a className="text-lg font-medium">pohon</a>
                         </div>
                     )}
                 </header>
@@ -123,7 +123,7 @@
                                 <div class="size-6 text-primary">
                                     <span class="material-symbols-outlined">spa</span>
                                 </div>
-                                <span class="text-xl font-bold text-slate-900 dark:text-white">Lumina</span>
+                                <span class="text-xl font-bold text-slate-900 dark:text-white">hafizah</span>
                             </div>
                             <p class="text-sm text-slate-500 dark:text-slate-400">
                                 Redefining beauty with clean ingredients and sustainable practices.
@@ -192,10 +192,10 @@
                                         <div class="flex flex-col gap-4 max-w-[800px] z-10 animate-fade-in-up">
                                             <span class="uppercase tracking-[0.2em] text-white text-xs font-bold bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full w-fit mx-auto border border-white/20">New Collection Spring '24</span>
                                             <h1 class="text-white text-5xl md:text-7xl font-black leading-[1.1] tracking-tight drop-shadow-sm">
-                                                Clean Beauty for<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-200 to-rose-400">Every Skin Tone</span>
+                                                nama saya nur hafizah<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-200 to-rose-400">bisa dipanggil fiza</span>
                                             </h1>
                                             <p class="text-slate-100 text-lg md:text-xl font-medium leading-relaxed max-w-[600px] mx-auto drop-shadow-sm">
-                                                Discover our range of ethically sourced, natural cosmetics designed to enhance your natural glow without compromise.
+                                                saya sekarang sekolah dismk 1 bangkinang kelas x pplg.
                                             </p>
                                             <div class="flex gap-4 justify-center mt-4">
                                                 <button onClick={() => navigate('/shop')} class="h-12 px-8 rounded-full bg-primary text-white text-base font-bold hover:bg-rose-600 transition-all shadow-lg shadow-primary/30 transform hover:scale-105 active:scale-95">
@@ -213,10 +213,10 @@
                                     <div class="flex flex-col md:flex-row gap-8 justify-between items-end">
                                         <div class="flex flex-col gap-4 max-w-[600px]">
                                             <h2 class="text-slate-900 dark:text-white text-3xl md:text-4xl font-bold leading-tight">
-                                                Beauty Without Compromise
+                                                X PPLG
                                             </h2>
                                             <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
-                                                We believe that what you put on your skin matters. That's why we've committed to three core pillars in everything we create.
+                                                PEMOGRAMAN PERANGKAT LUNAK DAN GAME.
                                             </p>
                                         </div>
                                         <a onClick={() => navigate('/about')} class="text-primary font-bold flex items-center gap-1 hover:gap-2 transition-all cursor-pointer">
@@ -225,9 +225,9 @@
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         {[
-                                            { icon: 'pets', color: 'pink', title: 'Cruelty Free', desc: 'Never tested on animals, always kind. We represent beauty with a conscience.' },
-                                            { icon: 'eco', color: 'green', title: 'Vegan Ingredients', desc: '100% plant-based formulas packed with botanicals for healthy, radiant skin.' },
-                                            { icon: 'recycling', color: 'blue', title: 'Sustainable Packaging', desc: 'Recycled materials and plastic-free shipping to protect our beautiful planet.' }
+                                            { icon: 'pets', color: 'pink', title: 'X PPLG', desc: 'Never tested on animals, always kind. We represent beauty with a conscience.' },
+                                            { icon: 'eco', color: 'green', title: 'X PPLG', desc: '100% plant-based formulas packed with botanicals for healthy, radiant skin.' },
+                                            { icon: 'recycling', color: 'blue', title: 'X PPLG', desc: 'Recycled materials and plastic-free shipping to protect our beautiful planet.' }
                                         ].map((item, index) => (
                                             <div key={index} class="group flex flex-col gap-4 rounded-2xl border border-slate-100 dark:border-[#48232c] bg-white dark:bg-surface-dark p-8 hover:shadow-xl hover:border-primary/20 transition-all duration-300">
                                                 <div class={`size-12 rounded-full bg-${item.color}-50 dark:bg-surface-dark flex items-center justify-center text-${item.color}-500 dark:text-${item.color}-300 group-hover:scale-110 transition-transform`}>
