@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Lumina Beauty</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ee2b5b", 
+                        "secondary": "#a2c1a6", 
+                        "background-light": "#fffafb",
+                        "background-dark": "#2a151b",
+                        "surface-dark": "#3e1f28",
+                        "accent-pink": "#f4e4e9",
+                        "primary-content": "#ffffff",
+                        "primary-dark": "#c21d46",
+                        "primary-light": "#f56e91",
+                        "surface-border": "#48232c",
+                        "text-muted": "#c992a0",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "1.5rem", "xl": "2.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased overflow-x-hidden">
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+        const { MemoryRouter, Routes, Route, Link, useNavigate } = ReactRouterDOM;
+
+        // --- Shared Components ---
+
+        const Navbar = ({ activePage }) => {
+            const navigate = useNavigate();
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+            const handleNav = (path) => (e) => {
+                e.preventDefault();
+                navigate(path);
+                setIsMenuOpen(false);
+            };
+
+            return (
+                <header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-[#48232c] px-4 md:px-10 py-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+                    <div class="flex items-center gap-3 cursor-pointer" onClick={handleNav('/')}>
+                        <div class="size-8 text-primary">
+                            <span class="material-symbols-outlined !text-[32px]">spa</span>
+                        </div>
+                        <h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">Lumina Beauty</h2>
+                    </div>
+                    
+                    <div class="hidden md:flex items-center gap-8">
+                        <a onClick={handleNav('/shop')} class={`text-sm font-medium transition-colors cursor-pointer ${activePage === 'shop' ? 'text-primary' : 'text-slate-600 dark:text-slate-200 hover:text-primary dark:hover:text-primary'}`}>Shop</a>
+                        <a onClick={handleNav('/about')} class={`text-sm font-medium transition-colors cursor-pointer ${activePage === 'about' ? 'text-primary' : 'text-slate-600 dark:text-slate-200 hover:text-primary dark:hover:text-primary'}`}>About</a>
+                        <a class="text-slate-600 dark:text-slate-200 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors cursor-pointer">Ingredients</a>
+                        <a class="text-slate-600 dark:text-slate-200 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors cursor-pointer">Journal</a>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <button onClick={handleNav('/shop')} class="hidden sm:flex h-10 px-5 cursor-pointer items-center justify-center rounded-full bg-primary hover:bg-primary/90 transition-colors text-white text-sm font-bold tracking-wide shadow-lg shadow-primary/20">
+                            <span>Shop Now</span>
+                        </button>
+                        <button class="flex size-10 cursor-pointer items-center justify-center rounded-full bg-slate-100 dark:bg-surface-dark text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-[#5a2e3a] transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">search</span>
+                        </button>
+                        <button class="flex size-10 cursor-pointer items-center justify-center rounded-full bg-slate-100 dark:bg-surface-dark text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-[#5a2e3a] transition-colors relative">
+                            <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+                            <span class="absolute top-0 right-0 size-2.5 bg-primary rounded-full border border-background-light dark:border-background-dark"></span>
+                        </button>
+                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} class="md:hidden flex size-10 cursor-pointer items-center justify-center rounded-full bg-slate-100 dark:bg-surface-dark text-slate-900 dark:text-white">
+                            <span class="material-symbols-outlined text-[20px]">menu</span>
+                        </button>
+                    </div>
+
+                    {/* Mobile Menu */}
+                    {isMenuOpen && (
+                        <div className="absolute top-full left-0 w-full bg-background-light dark:bg-background-dark border-b border-slate-200 dark:border-[#48232c] p-4 flex flex-col gap-4 md:hidden shadow-xl">
+                            <a onClick={handleNav('/shop')} className="text-lg font-medium">Shop</a>
+                            <a onClick={handleNav('/about')} className="text-lg font-medium">About</a>
+                            <a className="text-lg font-medium">Ingredients</a>
+                            <a className="text-lg font-medium">Journal</a>
+                        </div>
+                    )}
+                </header>
+            );
+        };
+
+        const Footer = () => {
+            const navigate = useNavigate();
+            const handleNav = (path) => (e) => {
+                e.preventDefault();
+                navigate(path);
+            };
+
+            return (
+                <footer class="border-t border-slate-200 dark:border-[#48232c] px-4 md:px-10 py-12 bg-slate-50 dark:bg-[#1f0e12]">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 max-w-[1440px] mx-auto">
+                        <div class="col-span-2 md:col-span-1 flex flex-col gap-4">
+                            <div class="flex items-center gap-2 cursor-pointer" onClick={handleNav('/')}>
+                                <div class="size-6 text-primary">
+                                    <span class="material-symbols-outlined">spa</span>
+                                </div>
+                                <span class="text-xl font-bold text-slate-900 dark:text-white">Lumina</span>
+                            </div>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">
+                                Redefining beauty with clean ingredients and sustainable practices.
+                            </p>
+                        </div>
+                        <div class="flex flex-col gap-4">
+                            <h4 class="text-slate-900 dark:text-white font-bold">Shop</h4>
+                            <a onClick={handleNav('/shop')} class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm cursor-pointer">Skincare</a>
+                            <a onClick={handleNav('/shop')} class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm cursor-pointer">Makeup</a>
+                            <a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm cursor-pointer">Sets & Gifts</a>
+                        </div>
+                        <div class="flex flex-col gap-4">
+                            <h4 class="text-slate-900 dark:text-white font-bold">About</h4>
+                            <a onClick={handleNav('/about')} class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm cursor-pointer">Our Story</a>
+                            <a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm cursor-pointer">Ingredients</a>
+                            <a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm cursor-pointer">Sustainability</a>
+                        </div>
+                        <div class="flex flex-col gap-4">
+                            <h4 class="text-slate-900 dark:text-white font-bold">Support</h4>
+                            <a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm cursor-pointer">FAQ</a>
+                            <a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm cursor-pointer">Contact Us</a>
+                        </div>
+                    </div>
+                    <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-slate-200 dark:border-[#48232c]">
+                        <p class="text-xs text-slate-500 dark:text-slate-400">© 2024 Lumina Beauty. All rights reserved.</p>
+                        <div class="flex gap-4">
+                            <a class="text-slate-400 hover:text-primary transition-colors cursor-pointer"><span class="sr-only">Instagram</span>
+                                <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewbox="0 0 24 24"><path clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772 4.902 4.902 0 011.772-1.153c.636-.247 1.363-.416 2.427-.465C9.673 2.013 10.03 2 12.488 2h-.173zM12.315 12.984a.984.984 0 110-1.968.984.984 0 010 1.968zm4.49-4.49a.984.984 0 110-1.968.984.984 0 010 1.968zM12.315 5.895c-3.542 0-6.42 2.878-6.42 6.42s2.878 6.42 6.42 6.42 6.42-2.878 6.42-6.42-2.878-6.42-6.42-6.42z" fill-rule="evenodd"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                </footer>
+            );
+        };
+
+        const Newsletter = () => (
+            <div class="px-4 md:px-10 pb-20 pt-10 text-center">
+                <div class="max-w-2xl mx-auto flex flex-col items-center gap-6">
+                    <span class="material-symbols-outlined text-4xl text-primary">mail</span>
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Join the Inner Circle</h2>
+                    <p class="text-slate-600 dark:text-slate-300">Subscribe to receive updates, access to exclusive deals, and more.</p>
+                    <div class="flex w-full max-w-md gap-2">
+                        <input class="flex-1 h-12 px-4 rounded-full border border-slate-300 dark:border-slate-600 bg-transparent text-slate-900 dark:text-white focus:outline-none focus:border-primary dark:focus:border-primary" placeholder="Enter your email" type="email"/>
+                        <button class="h-12 px-6 rounded-full bg-primary text-white font-bold hover:bg-rose-600 transition-colors">
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // --- Screen 1: Home Page ---
+
+        const HomePage = () => {
+            const navigate = useNavigate();
+
+            return (
+                <div class="relative flex min-h-screen w-full flex-col group/design-root">
+                    <div class="layout-container flex h-full grow flex-col">
+                        <Navbar activePage="home" />
+                        <main class="flex flex-col items-center justify-center w-full">
+                            <div class="flex flex-col max-w-[1440px] w-full">
+                                {/* Hero Section */}
+                                <div class="@container px-4 md:px-10 py-6">
+                                    <div class="relative flex min-h-[560px] flex-col gap-6 overflow-hidden rounded-xl md:rounded-[2.5rem] items-center justify-end md:justify-center p-8 md:p-16 text-center" style={{backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.6) 100%), url("fiza.png")', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+                                        <div class="flex flex-col gap-4 max-w-[800px] z-10 animate-fade-in-up">
+                                            <span class="uppercase tracking-[0.2em] text-white text-xs font-bold bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full w-fit mx-auto border border-white/20">New Collection Spring '24</span>
+                                            <h1 class="text-white text-5xl md:text-7xl font-black leading-[1.1] tracking-tight drop-shadow-sm">
+                                                Clean Beauty for<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-200 to-rose-400">Every Skin Tone</span>
+                                            </h1>
+                                            <p class="text-slate-100 text-lg md:text-xl font-medium leading-relaxed max-w-[600px] mx-auto drop-shadow-sm">
+                                                Discover our range of ethically sourced, natural cosmetics designed to enhance your natural glow without compromise.
+                                            </p>
+                                            <div class="flex gap-4 justify-center mt-4">
+                                                <button onClick={() => navigate('/shop')} class="h-12 px-8 rounded-full bg-primary text-white text-base font-bold hover:bg-rose-600 transition-all shadow-lg shadow-primary/30 transform hover:scale-105 active:scale-95">
+                                                    Shop Collection
+                                                </button>
+                                                <button onClick={() => navigate('/about')} class="h-12 px-8 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-base font-bold hover:bg-white/30 transition-all">
+                                                    Learn More
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* Brand Values Section */}
+                                <div class="flex flex-col gap-10 px-4 md:px-10 py-16">
+                                    <div class="flex flex-col md:flex-row gap-8 justify-between items-end">
+                                        <div class="flex flex-col gap-4 max-w-[600px]">
+                                            <h2 class="text-slate-900 dark:text-white text-3xl md:text-4xl font-bold leading-tight">
+                                                Beauty Without Compromise
+                                            </h2>
+                                            <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
+                                                We believe that what you put on your skin matters. That's why we've committed to three core pillars in everything we create.
+                                            </p>
+                                        </div>
+                                        <a onClick={() => navigate('/about')} class="text-primary font-bold flex items-center gap-1 hover:gap-2 transition-all cursor-pointer">
+                                            Read our full manifesto <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                                        </a>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        {[
+                                            { icon: 'pets', color: 'pink', title: 'Cruelty Free', desc: 'Never tested on animals, always kind. We represent beauty with a conscience.' },
+                                            { icon: 'eco', color: 'green', title: 'Vegan Ingredients', desc: '100% plant-based formulas packed with botanicals for healthy, radiant skin.' },
+                                            { icon: 'recycling', color: 'blue', title: 'Sustainable Packaging', desc: 'Recycled materials and plastic-free shipping to protect our beautiful planet.' }
+                                        ].map((item, index) => (
+                                            <div key={index} class="group flex flex-col gap-4 rounded-2xl border border-slate-100 dark:border-[#48232c] bg-white dark:bg-surface-dark p-8 hover:shadow-xl hover:border-primary/20 transition-all duration-300">
+                                                <div class={`size-12 rounded-full bg-${item.color}-50 dark:bg-surface-dark flex items-center justify-center text-${item.color}-500 dark:text-${item.color}-300 group-hover:scale-110 transition-transform`}>
+                                                    <span class="material-symbols-outlined text-[28px]">{item.icon}</span>
+                                                </div>
+                                                <div class="flex flex-col gap-2">
+                                                    <h3 class="text-slate-900 dark:text-white text-xl font-bold">{item.title}</h3>
+                                                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                {/* Featured Products */}
+                                <div class="w-full bg-slate-50 dark:bg-[#1f0e12] py-20">
+                                    <div class="px-4 md:px-10 max-w-[1440px] mx-auto">
+                                        <div class="flex justify-between items-center mb-10">
+                                            <h2 class="text-slate-900 dark:text-white text-3xl font-bold tracking-tight">Trending Now</h2>
+                                            <div class="flex gap-2">
+                                                <button class="size-10 rounded-full border border-slate-200 dark:border-[#48232c] flex items-center justify-center hover:bg-slate-100 dark:hover:bg-[#48232c] text-slate-900 dark:text-white transition-colors">
+                                                    <span class="material-symbols-outlined">arrow_back</span>
+                                                </button>
+                                                <button class="size-10 rounded-full border border-slate-200 dark:border-[#48232c] flex items-center justify-center bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 transition-opacity">
+                                                    <span class="material-symbols-outlined">arrow_forward</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                            {[
+                                                { name: "Hydrating Serum", price: "$45.00", desc: "With Hyaluronic Acid", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBL3uUroIGN-VzG4_7lvYiEKU-3cHclvFbcflo5L8678b0L6lJNt_IcibN1RkTT92n-B7FBXtIEAU-2hf36mI6Yx9QB-rO9DjSOMqO8-5w6_Ndympn7V0AHZJkWxlMiL3Rv0m9DgZj0xJMceigWr4JWKpG2xdLykGoQG_4uoggo9bO6HktKgAfeA0qa0Qf7zDGWTwC7b1G7Cvi13d1nXz4PKqGDZYxNFOXSGzRyttMo89SDevHdc00wKu9AjCqmCFEZ1QCx7B0_NZE", badge: "Best Seller" },
+                                                { name: "Night Recovery Cream", price: "$52.00", desc: "Deep repair formula", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAYzTBVelz206s6ZSFG9r8IgQHX7yjJG2JNCZf_5mLwMVlN4UQ4dJV6PzcLzz2FrtB0Jxgqxbv8oF0sNGuPELQwAazX06nOJtKPPbGJh7oJNoGBK3K9BZVipYJNEexBC-YRrh54PWeB4D1PvgUSxZYtJ_NaoYSy6T-FB8YLZqIzwyMXG-xnorwOIm53auOAq2rzdYQ4f046aX2V-E0W67L4h-ZH3yM5SuYEQm2HZf59vwo6_m5h6hgOQ50YA0YgwuU2eFSctSOP8nY", badge: null },
+                                                { name: "Velvet Matte Lip", price: "$24.00", desc: "Long-lasting color", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCqUzzVU28TwZkO24rrqbzjxIqnYG5aXfl74K3IYSgUo0duddbRuyMm7BM9j370sCz9favRTzGPvKKtNOqdUokC8uWxadz7QcxV-RSZMjhBhp_nNXntnxJLDCkSpEUf3aI_2e2DoyxxiMv4UD1D1yyL0_mkCxSVyobhZxX2KPH61tuNxmi2YGcqMuLfhumwVxndqy3NG7JRVcz4CEM2xTaxelp5_2wONpaI-km4g6Jw7VbkU25SlKZMO_MP3rZ-688n4MiWKiuOH0Y", badge: "New" },
+                                                { name: "Rose Water Mist", price: "$30.00", desc: "Refreshing hydration", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAlPcpevtmpKjSzJPXNM1sdmSM-s8AGNlAZzNttYFKFmFperH9zrIChcovMZNX7FBmu8xDgPKuKDVF75fsAxP6RauIiN32KBcckVySleclWLFA8DlO8Eq6MJPwGyf8Rbl-_Ji5b3nYSqu_qdvC-QtQUL9OnKgebaoFswZgL-aUK1HQufuz-yj4DATRLY00dmzCf_C6b3rnQ-vV3V510dhRee-n2ShKW_0O61Mt1ySEIdInHg6awd3Kk86oJSflIuONDJJXURBJh_zU", badge: null }
+                                            ].map((prod, idx) => (
+                                                <div key={idx} class="group flex flex-col gap-4 cursor-pointer" onClick={() => navigate('/shop')}>
+                                                    <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl bg-slate-200">
+                                                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{backgroundImage: `url("${prod.img}")`}}></div>
+                                                        {prod.badge && <span class={`absolute top-3 left-3 ${prod.badge === 'New' ? 'bg-primary text-white' : 'bg-white/90 text-slate-900'} backdrop-blur-sm text-xs font-bold px-2 py-1 rounded`}>{prod.badge}</span>}
+                                                        <button class="absolute bottom-4 right-4 size-10 bg-white text-slate-900 rounded-full flex items-center justify-center opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg hover:bg-primary hover:text-white">
+                                                            <span class="material-symbols-outlined text-[20px]">add_shopping_cart</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="flex flex-col gap-1">
+                                                        <div class="flex justify-between items-start">
+                                                            <h3 class="text-slate-900 dark:text-white text-lg font-bold">{prod.name}</h3>
+                                                            <p class="text-primary font-bold">{prod.price}</p>
+                                                        </div>
+                                                        <p class="text-slate-500 dark:text-slate-400 text-sm">{prod.desc}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* Promo / About Section */}
+                                <div class="w-full px-4 md:px-10 py-16">
+                                    <div class="relative w-full rounded-2xl overflow-hidden bg-[#a2c1a6] dark:bg-[#2a362b]">
+                                        <div class="flex flex-col md:flex-row items-center">
+                                            <div class="flex-1 p-8 md:p-16 flex flex-col justify-center items-start gap-6">
+                                                <div class="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-bold uppercase tracking-widest text-sm">
+                                                    <span class="w-8 h-[2px] bg-current"></span>
+                                                    <span>Our Philosophy</span>
+                                                </div>
+                                                <h2 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white leading-[1.1]">
+                                                    Nature's Best,<br/>Bottled for You.
+                                                </h2>
+                                                <p class="text-slate-700 dark:text-slate-300 text-lg max-w-[400px]">
+                                                    We source the finest botanical ingredients from around the world to create potent formulas that work in harmony with your skin.
+                                                </p>
+                                                <button onClick={() => navigate('/about')} class="mt-4 px-8 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-full font-bold hover:opacity-90 transition-opacity">
+                                                    Read Our Story
+                                                </button>
+                                            </div>
+                                            <div class="flex-1 h-[400px] md:h-[500px] w-full bg-cover bg-center" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCcsnoqtFlL7pofDQsz1iUib3BVU0ETHfXcMy4vziGxbYBCze2rCYs1sUf8zd5M28MDPnnRi6b-I3zGanEZJwanvvYwk3i6Gun8GtXlo2eCeiLAOHYPtVTk9b3wKTtsLPyAcVo4zl7RwcjLxSfdWWD1oSD7f0X-FOqh0fA2sXc_Ww74V3n5f_SX667Zp4UkpsueiAczOq5nV6HDytkJI-pz9p-65nNLZ-vxPn3LRo7Etq-ouvfI-swDx6VLU2LzTJtfs99YyHq2Mcw")'}}>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <Newsletter />
+                            </div>
+                        </main>
+                        <Footer />
+                    </div>
+                </div>
+            );
+        };
+
+        // --- Screen 2: About Us ---
+
+        const AboutPage = () => {
+            return (
+                <div class="relative flex min-h-screen w-full flex-col">
+                    <Navbar activePage="about" />
+                    <main class="flex-1 flex flex-col items-center">
+                        <div class="w-full max-w-[1280px] px-4 sm:px-10 py-5 flex flex-col gap-16">
+                            {/* Hero Section */}
+                            <section class="@container rounded-xl overflow-hidden relative">
+                                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
+                                <div class="flex min-h-[560px] flex-col gap-6 bg-cover bg-center bg-no-repeat items-start justify-center p-8 md:p-16 relative z-20" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBhGbNwI4qMp6LjpTngaBBckFNH--HyyxJ625Z0yG6E4iiUtqWFVSUhqaLtguUtA1IjDkivc9WbfLq2ttJI2_ObtVmXxlfd41HdvK-01MfbbXCXfUF64yTeRPHNP9Ix85XRXyT8vZPLeZQ8A48h3z4yUJvaFyHtOLgx1YhsNPImnHf-zYXjE9ey21Kh956_hc8GHM_y3uHDiu6pTSyUCpZQiajGUxFxN-yueYJ9DCQk9vuP1PommLzc-puCdTMuQfO38NebgSsTTm0")'}}>
+                                    <div class="flex flex-col gap-4 max-w-2xl">
+                                        <span class="text-primary font-bold tracking-widest uppercase text-sm">Our Philosophy</span>
+                                        <h1 class="text-white text-5xl md:text-7xl font-black leading-[0.95] tracking-tight">
+                                            Nature's Wisdom,<br/>Refined by Science.
+                                        </h1>
+                                        <p class="text-slate-200 text-lg md:text-xl font-medium leading-relaxed max-w-[540px]">
+                                            We bridge the gap between organic purity and clinical efficacy. Discover skincare that honors your skin's natural intelligence.
+                                        </p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <button class="flex items-center justify-center rounded-full h-12 px-8 bg-primary hover:bg-primary-dark text-white text-base font-bold transition-all shadow-lg shadow-primary/30">
+                                            Explore Our Origins
+                                        </button>
+                                    </div>
+                                </div>
+                            </section>
+                            {/* Mission Stats */}
+                            <section class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                                <div class="flex flex-col gap-6">
+                                    <h2 class="text-4xl font-bold leading-tight text-slate-900 dark:text-white">Conscious Beauty for the <span class="text-primary">Modern World</span></h2>
+                                    <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
+                                        Founded in 2018, Lumina started with a simple question: why do we have to choose between clean ingredients and real results? We set out to create a line that compromises on neither.
+                                    </p>
+                                    <div class="grid grid-cols-2 gap-6 mt-4">
+                                        <div class="flex flex-col gap-1 border-l-4 border-primary pl-4">
+                                            <span class="text-3xl font-bold text-slate-900 dark:text-white">100%</span>
+                                            <span class="text-sm text-text-muted font-medium">Vegan Formulation</span>
+                                        </div>
+                                        <div class="flex flex-col gap-1 border-l-4 border-primary pl-4">
+                                            <span class="text-3xl font-bold text-slate-900 dark:text-white">50k+</span>
+                                            <span class="text-sm text-text-muted font-medium">Happy Customers</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative h-[400px] w-full rounded-xl overflow-hidden group">
+                                    <img alt="Scientist working in a clean modern laboratory" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDt_KX9OpzQ0_QLCmFM3z3F38q03-mM_UcaHzlwBaOs3BGW5uZt04BjjvdswzhqmkgxBzr41tsboTiU5WEFbu2xskziB-pP_VGnTHsbyelVNIDqa_vzAuvG1FgEolOfxPDaOaSWdUXx8AccVyBvQsaQyzIuYk7hAOtQlUbsHn3cRookoahGjDBneG1p5n2VhfbYwXNtTwezbX8Wk1OgEu-HTWYExC4yxOCl2KyUFWbeDfaofEU9N6GVKc114BRCgJEnX_4TKfUiLUg"/>
+                                </div>
+                            </section>
+                            {/* Values Grid */}
+                            <section class="flex flex-col gap-8">
+                                <div class="flex flex-col gap-2 text-center items-center">
+                                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Core Pillars</h2>
+                                    <p class="text-text-muted max-w-md text-center">The non-negotiable standards that guide every product we create.</p>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    {[
+                                        {icon: 'cruelty_free', title: 'Cruelty Free', desc: 'Never tested on animals. We advocate for ethical beauty standards globally.'},
+                                        {icon: 'eco', title: 'Sustainably Sourced', desc: 'Ingredients harvested with respect for the earth and local communities.'},
+                                        {icon: 'science', title: 'Clinically Proven', desc: 'Formulas backed by rigorous scientific testing for real, visible results.'},
+                                        {icon: 'water_drop', title: 'Clean Formula', desc: 'Free from parabens, sulfates, and synthetic fragrances. Pure efficacy.'},
+                                    ].map((item, idx) => (
+                                        <div key={idx} class="flex flex-col gap-4 rounded-xl border dark:border-surface-border border-slate-200 dark:bg-surface-dark bg-white p-6 hover:border-primary/50 transition-colors group">
+                                            <div class="size-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                                                <span class="material-symbols-outlined text-2xl">{item.icon}</span>
+                                            </div>
+                                            <div class="flex flex-col gap-2">
+                                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">{item.title}</h3>
+                                                <p class="text-sm text-slate-500 dark:text-text-muted">{item.desc}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                            {/* Timeline */}
+                            <section class="py-8">
+                                <div class="flex flex-col md:flex-row gap-12">
+                                    <div class="w-full md:w-1/3 flex flex-col gap-4">
+                                        <span class="text-primary font-bold uppercase tracking-wider text-sm">Our Journey</span>
+                                        <h2 class="text-3xl md:text-4xl font-bold leading-tight text-slate-900 dark:text-white">From a Kitchen Experiment to Global Impact</h2>
+                                        <p class="text-slate-500 dark:text-text-muted">Every big thing starts small. Our timeline reflects our dedication to growth without compromising our values.</p>
+                                    </div>
+                                    <div class="w-full md:w-2/3 relative pl-8 md:pl-12 border-l border-slate-300 dark:border-surface-border space-y-12">
+                                        {[
+                                            {year: '2018', title: 'The Beginning', desc: 'Lumina founded by Dr. Sarah Chen in Seattle, WA with a single product: The Radiant Serum.', current: true},
+                                            {year: '2020', title: 'Expanding the Science', desc: 'Opened our first dedicated R&D lab to focus on plant-stem cell technology.', current: false},
+                                            {year: '2023', title: 'Going Global', desc: 'Launched international shipping to 35 countries and achieved B-Corp certification.', current: false},
+                                        ].map((item, idx) => (
+                                            <div key={idx} class="relative">
+                                                <span class={`absolute -left-[41px] md:-left-[57px] top-1 flex items-center justify-center size-6 rounded-full ${item.current ? 'bg-primary' : 'dark:bg-surface-border bg-slate-300'} ring-4 ring-background-light dark:ring-background-dark`}></span>
+                                                <div class="flex flex-col gap-2">
+                                                    <span class={`${item.current ? 'text-primary' : 'text-text-muted'} font-bold text-lg`}>{item.year}</span>
+                                                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">{item.title}</h3>
+                                                    <p class="text-slate-600 dark:text-slate-300">{item.desc}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </section>
+                            {/* Founder Section */}
+                            <section class="dark:bg-surface-dark bg-white rounded-[2rem] p-8 md:p-12 flex flex-col md:flex-row gap-10 items-center border dark:border-surface-border border-slate-100 shadow-xl dark:shadow-none">
+                                <div class="w-full md:w-1/3 aspect-[3/4] rounded-xl overflow-hidden shadow-lg relative shrink-0">
+                                    <img alt="Portrait of the founder smiling warmly" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvwzKecmoXSElo7eujwVl41sttM7XHEKemEPGWxth4OnKpWw-4ijS8SATffasnFU_c4US3AxuSAFmRvKTlLNtzPs44CgDE8JV60p5JsI1C9T6ogrVLzyZB3CKX7isOxoSABeiqi2KD8fNy-tT30CgcCghYrYF0XOJtepFzjSxo3JfoN0m31-hkIdWBWkYxAYt58Su_YLuugC58IzH3oGskHdfqGVP5LohODmvL0g4y0lZVL4JHEmDHR7F7U1yeHmushxhhQleFTUg"/>
+                                </div>
+                                <div class="flex flex-col gap-6 w-full">
+                                    <div class="flex flex-col gap-2">
+                                        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">A Note from Our Founder</h2>
+                                        <p class="text-primary font-medium">Dr. Sarah Chen, PhD</p>
+                                    </div>
+                                    <div class="relative">
+                                        <span class="absolute -top-4 -left-2 text-6xl text-primary/20 font-serif">"</span>
+                                        <p class="text-lg md:text-xl italic text-slate-700 dark:text-slate-200 leading-relaxed relative z-10">
+                                            I created Lumina because I was tired of reading ingredient lists that felt like a chemistry exam. I wanted skincare that was intuitive, transparent, and undeniably effective. Our mission isn't just to make you look better, but to make you feel empowered by the choices you make for your body.
+                                        </p>
+                                    </div>
+                                    <div class="pt-4">
+                                        <img alt="Founder signature" class="h-12 w-auto opacity-70 invert dark:invert-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjEn8YjL9dB7lYDu_diSo_3du2JoQxV-SMOKT5bbP2llpLt2sAPiyNwiRRSLUMg1k4OGaOIno7ixq_L1zxC-IKGHlQTgRnNQ2mQG2Ohc-r4WQuCd9epRjS40aX0AU4EsPQ1VkXcRJ245MsXJOSL7LwUU0SN93wKaZMM37XP3jaeu8whvkm_eIDl4Vy8pECOJszNtyWw8oX-vuV8KNf9kQ-a0WteU6vZgjRyUiXxxCDyDb3VnOw7URPzuXcwfQPlLZNZ3ZWsPmh3FA"/>
+                                    </div>
+                                </div>
+                            </section>
+                            {/* CTA */}
+                            <section class="w-full py-16 text-center flex flex-col items-center gap-6">
+                                <h2 class="text-4xl font-bold text-slate-900 dark:text-white">Ready to Experience the Difference?</h2>
+                                <p class="text-slate-500 dark:text-text-muted max-w-lg">Join thousands of others who have switched to clean, science-backed beauty.</p>
+                                <button class="flex items-center justify-center rounded-full h-12 px-8 bg-primary hover:bg-primary-dark text-white text-base font-bold transition-all w-fit">
+                                    Shop Best Sellers
+                                </button>
+                            </section>
+                        </div>
+                    </main>
+                    <Footer />
+                </div>
+            );
+        };
+
+        // --- Screen 3: Product Catalog (Shop) ---
+
+        const ShopPage = () => {
+            const products = [
+                { id: 1, name: "Velvet Matte Lipstick", price: "$24.00", desc: "Long-lasting color with a soft finish that keeps lips hydrated all day.", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCzpxRvzVBw9RtMQMZc_6CwsuLYzLVqUUbP-P7mkFGq5mhUuDb8pgAx0XmXpf_7Ykbz6ZrnKBNC4dix0g__oj7akAoCSkGeTWZjN1cKFdQ8EesT7JD1txc1abE3z969Bq-KTJmij2lBeONofMRNM-ONqs7cSENgphnvKOxY31_TpHi1esQBlk4IAmuL23A4YVYIzzO7ZUzubbnuvzHHRe2D8-OPaUTF87edtaaW603zGhqgJe9sBl03_76I3Dx-uaMOnfmHrYfta3w", colors: ['#D32F2F', '#C2185B', '#7B1FA2'] },
+                { id: 2, name: "Hydrating Face Serum", price: "$48.00", desc: "Deep hydration for glowing skin with hyaluronic acid and vitamin C.", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBusH-LDgqlNZyLV8Y155ZnpL1krnuFiCJiRF1PD37Cezy8d2H6mNgihFCUAPzzEqk0Yp-WKjP5TJ2Snc7ZmEA7Ls7-SRcdkvafsvqT9BBkBQTVWDUWUxoqQdnbGO5-4qqHAzIxetBB6ymozAAlQKYaD8g9rPR2h5N0qEIgp5LDbE9WE7CIqDBaWfsaAth-eAii9jr-WURuq1T87w_rnjcYfBO0XFHQAj3e11PmIw7ULRE7m3M83I9iy9PIhCQzhqVF2r08CMpBQp8", badge: "Best Seller" },
+                { id: 3, name: "Volumizing Mascara", price: "$28.00", desc: "Bold lashes with zero clumps. Water-resistant formula.", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD5v0xHVTcV-oxCVf5y40GdFZEDljjOpJV8PNLLgXl0VZgy3ytQF_-sSo5yQFHxZV5A5io4EjrEw2pXBHK6JGV-qRB8kwuzdGxzpclFGL7tmkrUN5hizUyAiY2HgDcp4wABSneJ2VkWgZZUo9BIohu8GYd_pQlNHJu4Zic8yL1Rsqf15nLwxE927VQKOX6IOY3QD1x2coiuUb16uSa57pITUm0-i8O9i1RtwbGDjG4Y-gf8t9SsZGHMX92NtQ3_Zfky7eC32V1YjzI" },
+                { id: 4, name: "Rose Gold Highlighter", price: "$32.00", desc: "Radiant glow for all skin tones. silky smooth application.", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBYqxAMSvYlHTxntMEQEI7eDHnLYX77d3_XFSrS1MXCE9HiDEbksGct0Mw9Xcntf-_ONFZJ_qGN4UU-R6wovQEYRUZVkTVH7o25VrQeTEMhEQAjRjbsJjlb_T_Yni7FB4TyW87gsQRxekAzZnLYdyTDs6KiFa9YxhlD9gLLfgARKkQ9Lb6j4vuvKTZATP6CmdTCOmxdPj2llXj2WWYpnnK7bHDWlbdSTE-aELsEFUqloPj_aZ1GzKQRmTEody01ALWq1iO0_R0SVxY" },
+                { id: 5, name: "Night Repair Cream", price: "$55.00", desc: "Revitalize skin while you sleep. Anti-aging formula.", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCtUxSD_VIoLFvoSoWKLjlI_OuXyUgutxLoyX9PEJ41oellDNFpbacdhrQVsvFJAMDrzhXu0KoEpp3s6wKZY8-uV-GOwtxRtstV9TOU-_n8EEDjbvw5iuhdRIOj73v_nhs-cb1reTeqGfXIHplU8-_d_Qb1ZuMQNaQlZ_Cjl0G60EaUZ0QOOyBUsHEGE_7M1L-Xh0EknrS_qtVv20aDdoSHJEtlhAZwAeeiNRagUaQIeZP6tz3qEvt2MIr90xbXWgJZAUxwcJ4bV7k" },
+                { id: 6, name: "Gentle Foaming Cleanser", price: "$22.00", desc: "Remove impurities without drying. Suitable for sensitive skin.", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAoUjI7d1I4sRCRMBumY_d0ZwV5zWwLxTnBU4sI8_JLmizuqqBHRB0-x3a8n9NHyxGwntVOFxF3JrU3kcyctklGu-eTYlDxUYHcIF8Mo8vgfbVyoQ758_U9iEVQj2SD-pGtL0sTApqxvipBwuC38uVm-pUPySuJ-vZeuXY5Eo8qfQuK2rs4R4o0kw88itFUruEjxC1mqG-2YD2eZOyX-QmorGMg7lIgit4vI9LZGOj1c5mtG2SKzNwfcnd71dS25Stq8-QRsMzCmz0", badge: "New" },
+                { id: 7, name: "Silk Hair Oil", price: "$35.00", desc: "Smooth frizz and add shine. Argan oil enriched.", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBH5TKedrBJthYBqXfYUo8J-dVoxBfLQLJFQqs-tf96Tox-p8zS7dGpz13HIRYMztk4OYCAfRKOQ--wrmq6snqRhelEMl-8WvApC1g3B0ow2fkf8yul_kW-dC8ecd7whT6yDu_WcpwWYmoJmyGaOccNbjQhU4Jx3cnZwYmw-gr4lvcAY0C-HaS_Uwor5ubgKk1jsd_j3lY5RVjUwjxoQSZh8K_ZPVkVYdMQL24bLYTfQj2--iZN51Hys8dTwhRPhcdSyYtCiaoGXyg" },
+                { id: 8, name: "Daily SPF 50", price: "$30.00", desc: "Invisible protection for daily wear. Non-greasy finish.", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDDWbIpdNKEA6j_U8nGZ6NV4ZLhkWR3Bfj4WtQaKX8Mqzn1WD7H6saUGvVa55IHoCPem_1Ox_aK2Y4aTu36ColM2Gz-lfYsjT_EvUXJrtQs3x5PtMrJl5ajJbV_gT52f4NWzrBcdrRvW-n0s7I4AqXHtpzobJqAyZ7XTp8TWqULvGZnjebjuKKovbRMah7rZOuCDJrEQnRWQ1Ntoq-EfoqWg4SM64GDFLmfYagVm8t6WGLhwi7nSLFERZ_qNglfCg1eky3pIQ_zBFw" },
+            ];
+
+            return (
+                <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+                    <Navbar activePage="shop" />
+                    <main class="flex flex-1 justify-center py-8">
+                        <div class="layout-content-container flex flex-col max-w-[1200px] flex-1 px-4 lg:px-8">
+                            {/* Header Section */}
+                            <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-10">
+                                <div class="flex flex-col gap-3 max-w-2xl">
+                                    <p class="text-slate-900 dark:text-white text-4xl md:text-5xl font-black leading-tight tracking-tight">Our Collection</p>
+                                    <p class="text-slate-500 dark:text-slate-400 text-lg font-normal leading-relaxed">
+                                        Explore our premium range of skincare and beauty essentials designed to enhance your natural radiance.
+                                    </p>
+                                </div>
+                                {/* Sort Dropdown (Visual Only) */}
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Sort by:</span>
+                                    <button class="flex items-center gap-2 px-4 py-2 bg-surface-light dark:bg-surface-dark rounded-full text-sm font-medium text-slate-900 dark:text-white border border-slate-200 dark:border-transparent hover:border-primary/50 transition-colors">
+                                        Featured
+                                        <span class="material-symbols-outlined text-[18px]">expand_more</span>
+                                    </button>
+                                </div>
+                            </div>
+                            {/* Category Filters */}
+                            <div class="flex gap-3 mb-10 flex-wrap overflow-x-auto pb-2 scrollbar-hide">
+                                <button class="group flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary pl-3 pr-5 transition-all shadow-lg shadow-primary/25">
+                                    <span class="material-symbols-outlined text-white text-[20px]">auto_awesome</span>
+                                    <p class="text-white text-sm font-bold">All Products</p>
+                                </button>
+                                {['Skincare', 'Makeup', 'Haircare', 'Fragrance'].map((cat, idx) => (
+                                    <button key={idx} class="group flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-transparent hover:border-primary hover:text-primary pl-3 pr-5 transition-all">
+                                        <span class="material-symbols-outlined text-primary text-[20px]">{cat === 'Skincare' ? 'water_drop' : cat === 'Makeup' ? 'face' : cat === 'Haircare' ? 'content_cut' : 'local_florist'}</span>
+                                        <p class="text-slate-700 dark:text-slate-200 group-hover:text-primary text-sm font-medium">{cat}</p>
+                                    </button>
+                                ))}
+                            </div>
+                            {/* Product Grid */}
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10">
+                                {products.map((prod) => (
+                                    <div key={prod.id} class="flex flex-col group cursor-pointer">
+                                        <div class="relative w-full aspect-[3/4] mb-4 overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark shadow-sm">
+                                            {prod.badge && <span class={`absolute top-3 left-3 ${prod.badge === 'Best Seller' ? 'bg-primary text-white' : 'bg-white text-slate-900'} text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider z-10`}>{prod.badge}</span>}
+                                            <div class="absolute top-3 right-3 z-10">
+                                                <button class="p-2 rounded-full bg-white/10 backdrop-blur-sm text-white hover:bg-primary hover:text-white transition-colors">
+                                                    <span class="material-symbols-outlined text-[20px]">favorite</span>
+                                                </button>
+                                            </div>
+                                            <div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105" style={{backgroundImage: `url("${prod.img}")`}}></div>
+                                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                            <button class="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 bg-white text-slate-900 text-sm font-bold py-2 px-6 rounded-full shadow-lg hover:bg-primary hover:text-white">
+                                                Quick View
+                                            </button>
+                                        </div>
+                                        <div class="flex flex-col gap-1">
+                                            <div class="flex justify-between items-start">
+                                                <h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight group-hover:text-primary transition-colors">{prod.name}</h3>
+                                                <span class="text-sm font-bold text-primary">{prod.price}</span>
+                                            </div>
+                                            <p class="text-slate-500 dark:text-slate-400 text-sm font-normal line-clamp-2">{prod.desc}</p>
+                                            {prod.colors && (
+                                                <div class="mt-2 flex gap-1">
+                                                    {prod.colors.map((c, i) => (
+                                                        <div key={i} class="size-4 rounded-full border border-slate-200 dark:border-slate-600" style={{backgroundColor: c}}></div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            {/* Pagination */}
+                            <div class="flex items-center justify-center p-4 mt-12">
+                                <nav class="flex items-center gap-2">
+                                    <a class="flex size-10 items-center justify-center rounded-full border border-slate-200 dark:border-surface-dark hover:bg-surface-light dark:hover:bg-surface-dark text-slate-500 dark:text-slate-400 transition-colors" href="#">
+                                        <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                                    </a>
+                                    <a class="flex size-10 items-center justify-center rounded-full bg-primary text-white text-sm font-bold shadow-lg shadow-primary/25" href="#">1</a>
+                                    <a class="flex size-10 items-center justify-center rounded-full border border-transparent hover:bg-surface-light dark:hover:bg-surface-dark text-slate-500 dark:text-slate-400 text-sm font-medium transition-colors" href="#">2</a>
+                                    <span class="flex size-10 items-center justify-center text-slate-400 text-sm">...</span>
+                                    <a class="flex size-10 items-center justify-center rounded-full border border-slate-200 dark:border-surface-dark hover:bg-surface-light dark:hover:bg-surface-dark text-slate-500 dark:text-slate-400 transition-colors" href="#">
+                                        <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                                    </a>
+                                </nav>
+                            </div>
+                        </div>
+                    </main>
+                    <section class="border-t border-slate-200 dark:border-surface-dark bg-background-light dark:bg-background-dark py-12 lg:py-16">
+                        <div class="layout-content-container max-w-[1200px] mx-auto px-4 lg:px-8">
+                            <div class="bg-surface-light dark:bg-surface-dark rounded-3xl p-8 lg:p-12 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+                                <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+                                <div class="flex flex-col gap-4 max-w-lg relative z-10">
+                                    <h3 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Join the Lumina Club</h3>
+                                    <p class="text-slate-500 dark:text-slate-300">Subscribe to receive updates, access to exclusive deals, and more.</p>
+                                </div>
+                                <div class="w-full max-w-md relative z-10">
+                                    <form class="flex flex-col sm:flex-row gap-3">
+                                        <input class="flex-1 bg-background-light dark:bg-background-dark border-transparent focus:border-primary focus:ring-0 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400" placeholder="Enter your email" type="email"/>
+                                        <button class="bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-xl transition-colors whitespace-nowrap" type="button">
+                                            Subscribe
+                                        </button>
+                                    </form>
+                                    <p class="text-xs text-slate-400 mt-3 text-center sm:text-left">By subscribing you agree to our <a class="underline hover:text-primary" href="#">Privacy Policy</a>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <Footer />
+                </div>
+            );
+        };
+
+
+        // --- App Shell ---
+
+        const App = () => {
+            return (
+                <MemoryRouter>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/about" element={<AboutPage />} />
+                        <Route path="/shop" element={<ShopPage />} />
+                    </Routes>
+                </MemoryRouter>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+
+    </script>
+</body>
+</html>
